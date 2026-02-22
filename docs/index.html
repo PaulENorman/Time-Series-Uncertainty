@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uncertainty in the Mean for Correlated Signals</title>
+<style>
+:root { --bg:#f7f8fa; --panel:#ffffff; --ink:#17202a; --line:#d8dee9; }
+body { margin:0; background:linear-gradient(180deg,#eef2f7 0%,#f8fafc 50%,#f3f6fb 100%); color:var(--ink); font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; line-height:1.6; }
+main { max-width: 980px; margin: 24px auto; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding: 28px 36px; box-shadow:0 10px 30px rgba(16,24,40,.06); }
+h1,h2,h3,h4 { line-height:1.25; margin:1.1em 0 .5em; }
+h1 { font-size: 2.1rem; border-bottom:2px solid var(--line); padding-bottom:.4rem; }
+h2 { font-size: 1.45rem; color:#0b5563; }
+p { margin:.7em 0; }
+hr { border:0; border-top:1px solid var(--line); margin:1.2em 0; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+code { background:#eef4ff; border:1px solid #d8e3ff; border-radius:4px; padding:1px 4px; font-size:.95em; }
+pre { background:#111827; color:#f9fafb; border-radius:10px; padding:14px; overflow:auto; border:1px solid #1f2937; }
+ul,ol { margin:.5em 0 .9em 1.25em; }
+img { display:block; max-width:100%; height:auto; margin:.6em auto 1.1em; border:1px solid var(--line); border-radius:8px; }
+a { color:#0f766e; text-decoration:none; border-bottom:1px dotted #0f766e; }
+.math { margin: .8em 0; }
+</style>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head><body><main>
+<p>Rendered from <code>docs/index.md</code>.</p>
+<h1>Uncertainty in the Mean for Correlated Signals</h1>
+<p>Given a single correlated-noise signal, what is the uncertainty in its mean?</p>
+<h2>1) The problem and approach</h2>
+<h3>Figure 0 — One signal, one running mean, one question</h3>
+<img src="assets/figures/figure_00_signal_and_running_mean.png" alt="Figure 0 — Signal and forward cumulative mean">
+<p>The lower panel is the forward cumulative average. It drifts, then slowly settles. The central question is: how uncertain is the final mean from one finite, correlated realization?</p>
+<p>This article addresses that question using batch-means estimators and the method of Mockett, Thiele, and Knacke [1]. We also place this approach in context with other families such as PyMBAR-style statistical inefficiency methods [2] and Heidelberger-Welch diagnostics [3].</p>
+<hr>
+<h2>2) Why $\sigma/\sqrt{n}$ fails for correlated signals</h2>
+<p>i.i.d. means independent and identically distributed samples.</p>
+<p>For i.i.d. data, the standard uncertainty of the sample mean is</p>
+<div class="math">\[\mathrm{Std}(\bar X) = \frac{\sigma}{\sqrt{n}}. \tag{1}\]</div>
+<p>For correlated signals, nearby samples are not independent, so the effective number of independent observations is smaller. A better model is:</p>
+<div class="math">\[\mathrm{Std}(\bar X) \approx \frac{\sigma}{\sqrt{n_{\mathrm{eff}}}},
+\qquad n_{\mathrm{eff}} < n. \tag{2}\]</div>
+<h3>Figure 1 — Effective sample size intuition</h3>
+<img src="assets/figures/figure_01_effective_sample_size.png" alt="Figure 1 — Effective sample size intuition">
+<p>Intuitively, the BM method looks like a better estimate of the uncertainty in the mean, while the $\sigma/\sqrt{n}$ estimate looks like it underestimates that uncertainty.</p>
+<hr>
+<h2>3) Batch means and ergodicity</h2>
+<p>The batch-means idea is:</p>
+<ol>
+<li>split one long signal into batches,</li>
+<li>compute batch means,</li>
+<li>use variance of those batch means as an estimate of uncertainty in the mean at that time scale,</li>
+<li>use the Mockett idea: fit/interpolate the batch-means trend versus averaging time and evaluate that model at the full signal length.</li>
+</ol>
+<p>This relies on an ergodicity assumption: time averages from one sufficiently long realization are representative of ensemble statistics.</p>
+<p>It is also possible to use batch means directly (without interpolation), but only when the batch means are approximately uncorrelated and enough batches remain to estimate variance stably. In practice, that requires extra checks (for example, batch-mean autocorrelation and sensitivity to batch length), or a defensible batch-length choice.</p>
+<h3>Figure 2 — Ergodic batching on a transient signal</h3>
+<img src="assets/figures/figure_02_ergodic_batches.png" alt="Figure 2 — Ergodic batching idea">
+<h3>Figure 4 — Batch means scaling and extrapolation</h3>
+<img src="assets/figures/figure_04_batch_means_intuition.png" alt="Figure 4 — Batch means intuition">
+<p>Why $t^{-1/2}$ scaling? For band-limited white noise, the exact normalized mean-variance model is</p>
+<div class="math">\[\mathrm{var\_mean\_bl}(t,B)
+= \frac{-\sin^2(\pi B t) + \pi B t \,\mathrm{Si}(2 \pi B t)}{(\pi B t)^2}. \tag{3}\]</div>
+<p>So the uncertainty ratio is</p>
+<div class="math">\[\frac{\sigma_{\mathrm{mean}}}{\sigma_{\mathrm{signal}}}
+= \sqrt{\mathrm{var\_mean\_bl}(t,B)}. \tag{4}\]</div>
+<p>At long averaging times, this asymptotes as</p>
+<div class="math">\[\frac{\sigma_{\mathrm{mean}}}{\sigma_{\mathrm{signal}}} \propto t^{-1/2}
+\quad \text{for large } t. \tag{5}\]</div>
+<h3>Figure 5 — How σ_mean/σ_signal changes with bandwidth B</h3>
+<img src="assets/figures/figure_05_bl_functional_form.png" alt="Figure 5 — BL functional form">
+<h3>Figure 6 — Raw signals across bandwidth regimes</h3>
+<img src="assets/figures/figure_06_noise_regimes_raw.png" alt="Figure 6 — Raw noise regimes">
+<p>These raw traces make the physical mechanism clear: lower-frequency modes persist longer in time and therefore dominate uncertainty in the mean over practical averaging windows.</p>
+<hr>
+<h2>4) Fitting methods for batch-means curves</h2>
+<p>For each window, we build points \((b_i, v_i)\), where \(b_i\) is batch length and \(v_i\) is the observed batch-mean variance at that length.</p>
+<p>The primary fit used in this repository is the full BL functional-form fit:</p>
+<div class="math">\[\hat B
+= \arg\min_B \sum_i
+\left[
+\log\!\left(\frac{v_i}{\sigma^2_{\mathrm{window}}}\right)
+- \log\!\left(\mathrm{var\_mean\_bl}(b_i, B)\right)
+\right]^2. \tag{6}\]</div>
+<p>Then the mean-uncertainty prediction at signal length \(T\) is</p>
+<div class="math">\[\widehat{\mathrm{Var}}(\bar X_T)
+= \mathrm{var\_mean\_bl}(T,\hat B)\,\sigma^2_{\mathrm{window}}. \tag{7}\]</div>
+<p>Alternative fitting/extrapolation ideas that are useful for comparison:</p>
+<ul>
+<li>Tail power-law fit, using \(\sigma_{\mathrm{mean}} \propto t^{-1/2}\) on the longest-time points.</li>
+<li>Conservative Mockett-style extrapolation, using the most conservative admissible bandwidth trend from the batch-mean scaling curve.</li>
+</ul>
+<p>Expected regime behavior:</p>
+<ul>
+<li>Underresolved \(B\): weak curvature, fit is most sensitive and can underpredict.</li>
+<li>Mid/resolved \(B\): strongest curvature leverage, fit is most reliable.</li>
+<li>Highly overresolved \(B\): curve is close to asymptotic scaling and methods tend to agree.</li>
+</ul>
+<h3>Figure 7 — Example of three fitting approaches on one batch-means curve</h3>
+<img src="assets/figures/figure_07_fitting_approaches.png" alt="Figure 7 — fitting approaches">
+<h3>Figure 8 — Expected fit behavior across B regimes</h3>
+<img src="assets/figures/figure_08_fitting_regimes.png" alt="Figure 8 — fitting regimes">
+<p>For the remainder of this article, we use the full functional-form fit method.</p>
+<hr>
+<h2>5) Overlapping batch means (OBM)</h2>
+<p>Overlapping batch means (OBM) reuses samples between consecutive batches to reduce estimator noise at a given batch length. This approach is classically discussed by Meketon and Schmeiser [4].</p>
+<h3>Figure 3 — What overlap means geometrically</h3>
+<img src="assets/figures/figure_03_obm_overlap_diagram.png" alt="Figure 3 — OBM overlap diagram">
+<hr>
+<h2>6) BM performance across bandwidth regimes</h2>
+<p>Generation details for Figures 14 and 10:</p>
+<ul>
+<li>Signals are generated using the artificial band-limited noise generator (<code>generate_bl_noise</code>) from this repository.</li>
+<li>Each bandwidth case uses 20 independent synthetic signals.</li>
+<li>Evaluation windows are sampled over integration times from 0.2 s to 100 s.</li>
+<li>BM estimates are compared against the analytic BL target.</li>
+</ul>
+<h3>Figure 14 — BM behavior over the full regime range</h3>
+<img src="assets/figures/figure_14_bm_regime_overview.png" alt="Figure 14 — BM regime overview">
+<h3>Figure 10 — BM-only performance vs B</h3>
+<img src="assets/figures/figure_10_performance_vs_B.png" alt="Figure 10 — BM performance">
+<p>At lower integration times, when the standard deviation and low-frequency modes are not yet well resolved, BM can underpredict the standard deviation of the mean.</p>
+<hr>
+<h2>7) OBM overlap-ratio effects</h2>
+<p>To isolate the overlap effect, this section compares OBM with overlap ratios 0.01, 0.1, 0.25, 0.5, and 0.75.</p>
+<p>Generation details for Figures 16 and 15:</p>
+<ul>
+<li>Signals are generated using the artificial band-limited noise generator (<code>generate_bl_noise</code>) from this repository.</li>
+<li>Each bandwidth case uses 20 independent synthetic signals.</li>
+<li>Evaluation windows are sampled over integration times from 0.2 s to 100 s.</li>
+<li>OBM estimates (for each overlap ratio) are compared against the analytic BL target.</li>
+</ul>
+<h3>Figure 16 — OBM behavior over the full regime range (overlap sweep)</h3>
+<img src="assets/figures/figure_16_obm_overlap_regime_overview.png" alt="Figure 16 — OBM overlap regime overview">
+<h3>Figure 15 — OBM performance vs B (overlap sweep)</h3>
+<img src="assets/figures/figure_15_obm_overlap_performance_vs_B.png" alt="Figure 15 — OBM overlap performance">
+<p>These two figures let the reader compare BM first, then see the OBM change over time and bandwidth as overlap increases.</p>
+<hr>
+<h2>8) References</h2>
+<p>[1] Mockett, C., Thiele, F., Knacke, T., and Stroh, A. (2010). *Detection of Initial Transients and Estimation of Statistical Error in Time-Resolved Turbulent Flow Data*. Proceedings of the 8th International Symposium on Engineering Turbulence Modelling and Measurements (ETMM8), Marseille, France, June 9-11, 2010.</p>
+<p>[2] Chodera, J. D., Swope, W. C., Pitera, J. W., Seok, C., and Dill, K. A. (2007). *Use of the weighted histogram analysis method for the analysis of simulated and parallel tempering simulations*. Journal of Chemical Theory and Computation, 3(1), 26-41.</p>
+<p>[3] Heidelberger, P., and Welch, P. D. (1983). *Simulation run length control in the presence of an initial transient*. Operations Research, 31(6), 1109-1144.</p>
+<p>[4] Meketon, M. S., and Schmeiser, B. W. (1984). *Overlapping Batch Means: Something for Nothing?* Proceedings of the Winter Simulation Conference.</p>
+</main></body></html>
