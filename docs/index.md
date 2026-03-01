@@ -160,7 +160,7 @@ Code: [`workflows/figure_12_realworld_methods.py`](../workflows/figure_12_realwo
 Code: [`workflows/figure_15_realworld_mae_vs_time.py`](../workflows/figure_15_realworld_mae_vs_time.py)
 
 ## Stationarity Detection (Mockett-Style)
-To identify initial non-stationarity, we remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is hard-clipped to zero once it decays by 99% of its initial value (at \(t=1\) s).
+To identify initial non-stationarity, we remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is hard-clipped to zero once it decays by 90% of its initial value (at \(t=1\) s).
 
 Using ACC-0c to estimate uncertainty in the mean for each trimmed signal, the curve \(s(t_{\mathrm{remove}})\) shows a minimum near the end of the transient. The minimum is used as the detected transient-removal time.
 
@@ -168,7 +168,7 @@ Using ACC-0c to estimate uncertainty in the mean for each trimmed signal, the cu
 ![Figure 16 — Stationarity scan](assets/figures/figure_16_stationarity_mockett.png)
 Code: [`workflows/figure_16_stationarity_mockett.py`](../workflows/figure_16_stationarity_mockett.py)
 
-### Figure 17 — Distribution of detected stabilization times (1σ, 2σ, 3σ transients)
+### Figure 17 — Two-panel distributions: detected stabilization time and mean bias (1σ, 2σ, 3σ transients)
 ![Figure 17 — Stabilization-time distribution](assets/figures/figure_17_stationarity_distribution.png)
 Code: [`workflows/figure_17_stationarity_distribution.py`](../workflows/figure_17_stationarity_distribution.py)
 

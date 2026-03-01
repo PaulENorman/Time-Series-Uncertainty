@@ -53,7 +53,7 @@ def _build_signal():
         dt=DT,
         amplitude_std=TRANSIENT_AMP_STD,
         cutoff_time=TRANSIENT_CUTOFF_TIME,
-        cutoff_fraction=0.01,  # hard cutoff at 99% decay
+        cutoff_fraction=0.10,  # hard cutoff at 90% decay
     )
     return t, x_w_tr, transient
 
@@ -74,7 +74,7 @@ def main():
     ax = axs[0]
     ax.plot(t, x, color="0.20", lw=1.0, label="Signal with transient")
     ax.plot(t, transient + np.mean(x), color="tab:red", lw=1.5, ls="--", label="Added transient")
-    ax.axvline(TRANSIENT_CUTOFF_TIME, color="tab:red", ls=":", lw=1.2, label="True cutoff (99% decay)")
+    ax.axvline(TRANSIENT_CUTOFF_TIME, color="tab:red", ls=":", lw=1.2, label="True cutoff (90% decay)")
     if np.isfinite(t_star):
         ax.axvline(t_star, color="tab:blue", ls=":", lw=1.3, label=f"Detected transient end: {t_star:.2f} s")
     ax.set_xlim(0.0, x_max)

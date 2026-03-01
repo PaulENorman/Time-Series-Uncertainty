@@ -1,0 +1,4 @@
+# GitHub Pages configuration for Time-Series-Uncertainty
+
+# This file tells GitHub Pages to publish from the main branch and the docs/ folder.
+# No Jekyll processing (disable with .nojekyll).

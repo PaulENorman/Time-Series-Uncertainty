@@ -51,9 +51,9 @@ def _build_signal(seed, amp_std):
         dt=DT,
         amplitude_std=float(amp_std),
         cutoff_time=TRANSIENT_CUTOFF_TIME,
-        cutoff_fraction=0.01,
+        cutoff_fraction=0.10,
     )
-    return x_w_tr
+    return x, x_w_tr
 
 
 def _smooth_density_line(samples, x_grid, bw_bins=2.0):
@@ -69,14 +69,17 @@ def _smooth_density_line(samples, x_grid, bw_bins=2.0):
 
 
 def main():
-    fig, ax = plt.subplots(figsize=(9.2, 5.4))
-    bins = np.linspace(0.0, 2.2, 140)
+    fig, axs = plt.subplots(2, 1, figsize=(9.4, 8.4), sharex=False)
+    ax_top, ax_bot = axs
+    bins_t = np.linspace(0.0, 2.2, 140)
+    bins_b = np.linspace(-0.06, 0.26, 150)
     colors = {1.0: "tab:blue", 2.0: "tab:purple", 3.0: "tab:green"}
 
     for amp in AMP_LEVELS:
         t_star = []
+        mean_bias = []
         for i in range(N_SIGNALS):
-            x = _build_signal(BASE_SEED + 10000 * int(amp) + i, amp_std=amp)
+            x_base, x = _build_signal(BASE_SEED + 10000 * int(amp) + i, amp_std=amp)
             res = estimate_stabilization_time_mockett(
                 x,
                 dt=DT,
@@ -85,18 +88,29 @@ def main():
             )
             if np.isfinite(res.t_star):
                 t_star.append(float(res.t_star))
+            mean_bias.append(float(np.mean(x) - np.mean(x_base)))
         t_star = np.asarray(t_star, dtype=float)
+        mean_bias = np.asarray(mean_bias, dtype=float)
         if t_star.size == 0:
             continue
-        xc, yc = _smooth_density_line(t_star, bins, bw_bins=2.0)
-        ax.plot(xc, yc, color=colors[amp], lw=2.0, label=f"{int(amp)}$\\sigma$ transient")
+        xc, yc = _smooth_density_line(t_star, bins_t, bw_bins=2.0)
+        ax_top.plot(xc, yc, color=colors[amp], lw=2.0, label=f"{int(amp)}$\\sigma$ transient")
+        xb, yb = _smooth_density_line(mean_bias, bins_b, bw_bins=2.0)
+        ax_bot.plot(xb, yb, color=colors[amp], lw=2.0, label=f"{int(amp)}$\\sigma$ transient")
 
-    ax.axvline(TRANSIENT_CUTOFF_TIME, color="tab:red", ls="--", lw=1.6, label="True cutoff (1.0 s)")
-    ax.set_xlabel("Predicted stabilization time (s)")
-    ax.set_ylabel("Density")
-    ax.set_title("Detected stabilization-time distributions (ACC-0c, Mockett scan)")
-    ax.grid(True, alpha=0.25)
-    ax.legend(fontsize=9)
+    ax_top.axvline(TRANSIENT_CUTOFF_TIME, color="tab:red", ls="--", lw=1.6, label="True cutoff (1.0 s)")
+    ax_top.set_xlabel("Predicted stabilization time (s)")
+    ax_top.set_ylabel("Density")
+    ax_top.set_title("Detected stabilization-time distributions (ACC-0c, Mockett scan)")
+    ax_top.grid(True, alpha=0.25)
+    ax_top.legend(fontsize=9)
+
+    ax_bot.axvline(0.0, color="0.35", ls="--", lw=1.2)
+    ax_bot.set_xlabel("Added bias in sample mean")
+    ax_bot.set_ylabel("Density")
+    ax_bot.set_title("Distribution of transient-induced mean bias")
+    ax_bot.grid(True, alpha=0.25)
+    ax_bot.legend(fontsize=9)
 
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     out = FIG_DIR / "figure_17_stationarity_distribution.png"

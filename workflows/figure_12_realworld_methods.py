@@ -25,8 +25,8 @@ HI_FREQ_SLOPE = -5.0 / 3.0
 T_SIGNAL = 300.0
 T_GENERATE = 3.0 * T_SIGNAL
 TIME_POINTS = np.logspace(np.log10(0.2), np.log10(100.0), 20)
-N_TARGET_SIGNALS = 80
-N_METHOD_SIGNALS = 12
+N_TARGET_SIGNALS = 800
+N_METHOD_SIGNALS = 120
 N_WINDOWS_TARGET = 4
 N_WINDOWS_METHOD = 1
 BASE_SEED = 260219
@@ -54,7 +54,6 @@ def _mc_target(signals, time_points, seed):
     n_long = len(signals[0])
     rng = np.random.default_rng(seed)
     y = []
-    y_std = []
     for t in time_points:
         n_eval = int(round(float(t) / DT))
         max_start = max(1, n_long - n_eval)
@@ -70,8 +69,7 @@ def _mc_target(signals, time_points, seed):
         sm = float(np.std(means, ddof=1))
         ss = float(np.mean(sigmas))
         y.append(sm / max(ss, 1e-15))
-        y_std.append(float(np.std(np.abs(means), ddof=1) / max(ss, 1e-15)))
-    return np.asarray(y), np.asarray(y_std)
+    return np.asarray(y)
 
 
 def _method_curves(signals, time_points, seed):
@@ -101,19 +99,11 @@ def _method_curves(signals, time_points, seed):
 def main():
     target = [_build_signal(BASE_SEED + 10000 + i) for i in range(N_TARGET_SIGNALS)]
     method = [_build_signal(BASE_SEED + 20000 + i) for i in range(N_METHOD_SIGNALS)]
-    y_mc, y_mc_std = _mc_target(target, TIME_POINTS, BASE_SEED + 300000)
+    y_mc = _mc_target(target, TIME_POINTS, BASE_SEED + 300000)
     preds = _method_curves(method, TIME_POINTS, BASE_SEED + 400000)
 
     fig, ax = plt.subplots(figsize=(9.8, 6.0))
     ax.loglog(TIME_POINTS, y_mc, "k-", lw=2.2, label="MC target")
-    ax.fill_between(
-        TIME_POINTS,
-        np.clip(y_mc - y_mc_std, 1e-12, np.inf),
-        np.clip(y_mc + y_mc_std, 1e-12, np.inf),
-        color="k",
-        alpha=0.1,
-        linewidth=0,
-    )
     for k in KEEP_METHODS:
         c, m, ls, _ = HYBRID_METHOD_STYLE[k]
         ax.loglog(TIME_POINTS, preds[k], color=c, marker=m, ls=ls, lw=1.8, ms=4.2, label=k)

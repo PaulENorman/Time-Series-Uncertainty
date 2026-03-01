@@ -141,12 +141,12 @@ window.MathJax = {
 <img src="assets/figures/figure_15_realworld_mae_vs_time.png" alt="Figure 15 — Piecewise-spectrum MAE vs time">
 <p>Code: <a href="../workflows/figure_15_realworld_mae_vs_time.py"><code>workflows/figure_15_realworld_mae_vs_time.py</code></a></p>
 <h2>Stationarity Detection (Mockett-Style)</h2>
-<p>To identify initial non-stationarity, we remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is hard-clipped to zero once it decays by 99% of its initial value (at \(t=1\) s).</p>
+<p>To identify initial non-stationarity, we remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is hard-clipped to zero once it decays by 90% of its initial value (at \(t=1\) s).</p>
 <p>Using ACC-0c to estimate uncertainty in the mean for each trimmed signal, the curve \(s(t_{\mathrm{remove}})\) shows a minimum near the end of the transient. The minimum is used as the detected transient-removal time.</p>
 <h3>Figure 16 — Mockett-style stationarity scan with ACC-0c</h3>
 <img src="assets/figures/figure_16_stationarity_mockett.png" alt="Figure 16 — Stationarity scan">
 <p>Code: <a href="../workflows/figure_16_stationarity_mockett.py"><code>workflows/figure_16_stationarity_mockett.py</code></a></p>
-<h3>Figure 17 — Distribution of detected stabilization times (1σ, 2σ, 3σ transients)</h3>
+<h3>Figure 17 — Two-panel distributions: detected stabilization time and mean bias (1σ, 2σ, 3σ transients)</h3>
 <img src="assets/figures/figure_17_stationarity_distribution.png" alt="Figure 17 — Stabilization-time distribution">
 <p>Code: <a href="../workflows/figure_17_stationarity_distribution.py"><code>workflows/figure_17_stationarity_distribution.py</code></a></p>
 <h2>Practical Takeaways</h2>
