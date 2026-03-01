@@ -1,0 +1,33 @@
+# GitHub Pages workflow for docs/
+# This workflow will build and deploy the docs/ folder to GitHub Pages on push to main.
+
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build docs (if needed)
+        run: |
+          echo "No build step needed for static HTML in docs/"
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          cname: paulnorman.cc

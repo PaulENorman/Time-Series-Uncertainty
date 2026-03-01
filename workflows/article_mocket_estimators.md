@@ -8,7 +8,6 @@ Final method registry:
 - OBM
 - BM-std
 - BM-joint
-- BM-dual
 
 All evaluation scripts import methods from `method_registry.py`, so plots and tables stay consistent.
 
@@ -55,6 +54,6 @@ rows=sorted(rows,key=lambda r:r[1]); print('Method        MAE(rel)   RMSE(abs)  
 
 ## 5) Notes
 - `var_mean_bl_std_fit` keeps the within-batch variance correction path.
-- `var_mean_bl_joint_fit` and `var_mean_bl_dual_fit` are retained for asymptotic-variance correction behavior.
+- `var_mean_bl_joint_fit` is retained for asymptotic-variance correction behavior.
 - Deprecated experimental variants (`regime`, `refσ`, `hybrid`, `ivc`, legacy aliases) are removed from the package public API.
 - Additional exploratory scripts (`plot_joint_*.py`) are unchanged and optional.

@@ -23,7 +23,6 @@ from .estimators import (
     var_mean_bl_fit,
     var_mean_bl_std_fit,
     var_mean_bl_joint_fit,
-    var_mean_bl_dual_fit,
 )
 
 from .noise import (
@@ -31,6 +30,12 @@ from .noise import (
     generate_bl_noise,
     generate_multiband_noise,
     noise_from_pow_spec,
+)
+
+from .stabilization import (
+    StabilizationResult,
+    add_exponential_transient,
+    estimate_stabilization_time_mockett,
 )
 
 __all__ = [
@@ -42,9 +47,11 @@ __all__ = [
     "var_mean_bl_fit",
     "var_mean_bl_std_fit",
     "var_mean_bl_joint_fit",
-    "var_mean_bl_dual_fit",
     "band_limited_noise",
     "generate_bl_noise",
     "generate_multiband_noise",
     "noise_from_pow_spec",
+    "StabilizationResult",
+    "add_exponential_transient",
+    "estimate_stabilization_time_mockett",
 ]

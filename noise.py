@@ -22,11 +22,9 @@ def noise_from_pow_spec(rfft_freqs, pow_spec, seed=None):
     -------
     ndarray (1-D) — time-domain noise realisation.
     """
-    if seed is not None:
-        np.random.seed(seed)
-
+    rng = np.random.default_rng(seed)
     rand_phase = np.array(np.sqrt(pow_spec), dtype="complex")
-    phi = 2 * np.pi * np.random.rand(rfft_freqs.size)
+    phi = 2 * np.pi * rng.random(rfft_freqs.size)
     phi = np.cos(phi) + 1j * np.sin(phi)
     rand_phase *= phi
     return np.fft.irfft(rand_phase).T
@@ -132,4 +130,44 @@ def generate_multiband_noise(bandwidths, length, dt, seed=None):
     sig = np.sum(parts, axis=0)
     sig -= np.mean(sig)
     std = np.std(sig)
+    return sig / std if std > 0 else sig
+
+
+def generate_piecewise_power_noise(break_freq, slope, length, dt, seed=None):
+    """
+    Generate zero-mean, unit-std noise with piecewise PSD:
+      - constant for 0 < f <= break_freq
+      - proportional to (f / break_freq)^slope for f > break_freq
+
+    Parameters
+    ----------
+    break_freq : float
+        Break frequency in Hz.
+    slope : float
+        Power-law exponent above break frequency (e.g. -5/3).
+    length : float
+        Signal duration in seconds.
+    dt : float
+        Time step in seconds.
+    seed : int, optional
+        RNG seed.
+
+    Returns
+    -------
+    ndarray (1-D) — zero-mean, unit-variance signal.
+    """
+    n = int(length / dt)
+    freqs = np.fft.rfftfreq(n, dt)
+    p_spec = np.ones_like(freqs, dtype=float)
+    p_spec[0] = 0.0
+
+    b = max(float(break_freq), 1e-12)
+    mask_hi = freqs > b
+    p_spec[mask_hi] = np.power(freqs[mask_hi] / b, float(slope))
+    p_spec = np.clip(p_spec, 0.0, np.inf)
+
+    sig = noise_from_pow_spec(freqs, p_spec, seed=seed)
+    sig = np.asarray(sig, dtype=float)
+    sig -= np.mean(sig)
+    std = float(np.std(sig))
     return sig / std if std > 0 else sig
