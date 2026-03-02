@@ -3,6 +3,7 @@ Bandwidth-limited noise generation.
 """
 
 import numpy as np
+import scipy.fft as sfft
 
 
 def noise_from_pow_spec(rfft_freqs, pow_spec, seed=None):
@@ -27,7 +28,7 @@ def noise_from_pow_spec(rfft_freqs, pow_spec, seed=None):
     phi = 2 * np.pi * rng.random(rfft_freqs.size)
     phi = np.cos(phi) + 1j * np.sin(phi)
     rand_phase *= phi
-    return np.fft.irfft(rand_phase).T
+    return sfft.irfft(rand_phase).T
 
 
 def band_limited_noise(f_c, bw, length, dt, mag_std=1.0, seed=None):
@@ -57,7 +58,7 @@ def band_limited_noise(f_c, bw, length, dt, mag_std=1.0, seed=None):
     max_freq = f_c + 0.5 * bw
     sig_len = int(length / dt)
 
-    freqs = np.fft.rfftfreq(sig_len, dt)
+    freqs = sfft.rfftfreq(sig_len, dt)
     p_spec = np.zeros_like(freqs)
 
     mask = (freqs > min_freq) & (freqs < max_freq)
@@ -157,7 +158,7 @@ def generate_piecewise_power_noise(break_freq, slope, length, dt, seed=None):
     ndarray (1-D) — zero-mean, unit-variance signal.
     """
     n = int(length / dt)
-    freqs = np.fft.rfftfreq(n, dt)
+    freqs = sfft.rfftfreq(n, dt)
     p_spec = np.ones_like(freqs, dtype=float)
     p_spec[0] = 0.0
 

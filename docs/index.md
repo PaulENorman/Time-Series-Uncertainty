@@ -133,6 +133,14 @@ In practice, this method is useful when early parts of the curve are not suffici
 ![Figure 9 — Tail theory](assets/figures/figure_09_tail_theory.png)
 Code: [`workflows/figure_07_tail_theory.py`](../workflows/figure_07_tail_theory.py)
 
+### Figure 9B — Tail vs BM across regimes
+![Figure 9B — Tail vs BM regimes](assets/figures/figure_09b_tail_vs_bm_regimes.png)
+Code: [`workflows/figure_09b_tail_vs_bm_regimes.py`](../workflows/figure_09b_tail_vs_bm_regimes.py)
+
+### Figure 9C — Tail vs BM MAE across B
+![Figure 9C — Tail vs BM MAE](assets/figures/figure_09c_tail_vs_bm_mae.png)
+Code: [`workflows/figure_09c_tail_vs_bm_mae.py`](../workflows/figure_09c_tail_vs_bm_mae.py)
+
 ## Comparative Performance on BL Signals
 The next figures compare BM, OBM (75%), ACC-0c, and Tail.
 
@@ -153,14 +161,14 @@ Code: [`workflows/figure_13_realworld_noise.py`](../workflows/figure_13_realworl
 
 ### Figure 14 — Method comparison on piecewise-spectrum signal (BM, OBM 75%, ACC-0c, Tail)
 ![Figure 14 — Piecewise-spectrum methods](assets/figures/figure_14_realworld_methods.png)
-Code: [`workflows/figure_12_realworld_methods.py`](../workflows/figure_12_realworld_methods.py)
+Code: [`workflows/figure_14_15_realworld_combined.py`](../workflows/figure_14_15_realworld_combined.py)
 
 ### Figure 15 — MAE vs integration time on piecewise-spectrum signal
 ![Figure 15 — Piecewise-spectrum MAE vs time](assets/figures/figure_15_realworld_mae_vs_time.png)
-Code: [`workflows/figure_15_realworld_mae_vs_time.py`](../workflows/figure_15_realworld_mae_vs_time.py)
+Code: [`workflows/figure_14_15_realworld_combined.py`](../workflows/figure_14_15_realworld_combined.py)
 
 ## Stationarity Detection (Mockett-Style)
-To identify initial non-stationarity, we remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is hard-clipped to zero once it decays by 90% of its initial value (at \(t=1\) s).
+To identify initial non-stationarity, we remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is shifted so the 90% cutoff at \(t=1\) s is continuous (no step jump at cutoff).
 
 Using ACC-0c to estimate uncertainty in the mean for each trimmed signal, the curve \(s(t_{\mathrm{remove}})\) shows a minimum near the end of the transient. The minimum is used as the detected transient-removal time.
 

@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.fft as sfft
+from scipy.fft import next_fast_len
 from pathlib import Path
 import sys
 
@@ -21,9 +23,10 @@ def _autocov_fft(x, max_lag):
     x = np.asarray(x, dtype=float)
     n = x.size
     x = x - np.mean(x)
-    nfft = 1 << int(np.ceil(np.log2(2 * n - 1)))
-    fx = np.fft.rfft(x, n=nfft)
-    c_full = np.fft.irfft(fx * np.conj(fx), n=nfft)
+    nfft = next_fast_len(2 * n - 1)
+    fx = sfft.rfft(x, n=nfft)
+    pxx = fx.real * fx.real + fx.imag * fx.imag
+    c_full = sfft.irfft(pxx, n=nfft)
     c = c_full[:n]
     denom = np.arange(n, 0, -1, dtype=float)  # unbiased
     c = c / np.maximum(denom, 1.0)

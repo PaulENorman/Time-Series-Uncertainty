@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.fft as sfft
 from pathlib import Path
 import sys
 
@@ -27,8 +28,8 @@ T_GENERATE = 3.0 * T_SIGNAL
 TIME_POINTS = np.logspace(np.log10(0.2), np.log10(100.0), 20)
 N_TARGET_SIGNALS = 800
 N_METHOD_SIGNALS = 120
-N_WINDOWS_TARGET = 4
-N_WINDOWS_METHOD = 1
+N_WINDOWS_TARGET = 3
+N_WINDOWS_METHOD = 3
 BASE_SEED = 260219
 KEEP_METHODS = list(HYBRID_METHODS.keys())
 
@@ -36,7 +37,7 @@ KEEP_METHODS = list(HYBRID_METHODS.keys())
 def _build_signal(seed):
     n = int(T_SIGNAL / DT)
     n_long = int(T_GENERATE / DT)
-    freqs = np.fft.rfftfreq(n_long, DT)
+    freqs = sfft.rfftfreq(n_long, DT)
     p = np.ones_like(freqs)
     p[0] = 0.0
     m = freqs > BREAK_FREQ

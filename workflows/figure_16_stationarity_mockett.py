@@ -33,7 +33,6 @@ SEED = 20260301
 
 
 def _build_signal():
-    # 3x generation to avoid periodic artifacts from FFT synthesis.
     t_generate = 3.0 * T_SIGNAL
     x_long = generate_piecewise_power_noise(
         break_freq=BREAK_FREQ,
@@ -53,7 +52,7 @@ def _build_signal():
         dt=DT,
         amplitude_std=TRANSIENT_AMP_STD,
         cutoff_time=TRANSIENT_CUTOFF_TIME,
-        cutoff_fraction=0.10,  # hard cutoff at 90% decay
+        cutoff_fraction=0.10,
     )
     return t, x_w_tr, transient
 

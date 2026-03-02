@@ -17,11 +17,12 @@ ORDERED_SCRIPTS = [
     "figure_08b_acc_variants_single_B.py",    # -> figure_08b_acc_variants_single_B.png
     "figure_08c_acc_variants_mae_vs_B.py",    # -> figure_08c_acc_variants_mae_vs_B.png
     "figure_07_tail_theory.py",               # -> figure_09_tail_theory.png
+    "figure_09b_tail_vs_bm_regimes.py",       # -> figure_09b_tail_vs_bm_regimes.png
+    "figure_09c_tail_vs_bm_mae.py",           # -> figure_09c_tail_vs_bm_mae.png
     "figure_09_methods_regimes.py",           # -> figure_11_methods_regimes.png
     "figure_10_methods_mae_vs_B.py",          # -> figure_12_methods_mae_vs_B.png
     "figure_13_realworld_noise.py",           # -> figure_13_realworld_noise.png
-    "figure_12_realworld_methods.py",         # -> figure_14_realworld_methods.png
-    "figure_15_realworld_mae_vs_time.py",     # -> figure_15_realworld_mae_vs_time.png
+    "figure_14_15_realworld_combined.py",     # -> figure_14_realworld_methods.png + figure_15_realworld_mae_vs_time.png
     "figure_16_stationarity_mockett.py",      # -> figure_16_stationarity_mockett.png
     "figure_17_stationarity_distribution.py", # -> figure_17_stationarity_distribution.png
 ]

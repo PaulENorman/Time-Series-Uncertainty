@@ -121,6 +121,12 @@ window.MathJax = {
 <h3>Figure 9 — Tail-fit concept</h3>
 <img src="assets/figures/figure_09_tail_theory.png" alt="Figure 9 — Tail theory">
 <p>Code: <a href="../workflows/figure_07_tail_theory.py"><code>workflows/figure_07_tail_theory.py</code></a></p>
+<h3>Figure 9B — Tail vs BM across regimes</h3>
+<img src="assets/figures/figure_09b_tail_vs_bm_regimes.png" alt="Figure 9B — Tail vs BM regimes">
+<p>Code: <a href="../workflows/figure_09b_tail_vs_bm_regimes.py"><code>workflows/figure_09b_tail_vs_bm_regimes.py</code></a></p>
+<h3>Figure 9C — Tail vs BM MAE across B</h3>
+<img src="assets/figures/figure_09c_tail_vs_bm_mae.png" alt="Figure 9C — Tail vs BM MAE">
+<p>Code: <a href="../workflows/figure_09c_tail_vs_bm_mae.py"><code>workflows/figure_09c_tail_vs_bm_mae.py</code></a></p>
 <h2>Comparative Performance on BL Signals</h2>
 <p>The next figures compare BM, OBM (75%), ACC-0c, and Tail.</p>
 <h3>Figure 11 — Regime snapshots (BM, OBM 75%, ACC-0c, Tail)</h3>
@@ -136,12 +142,12 @@ window.MathJax = {
 <p>Code: <a href="../workflows/figure_13_realworld_noise.py"><code>workflows/figure_13_realworld_noise.py</code></a></p>
 <h3>Figure 14 — Method comparison on piecewise-spectrum signal (BM, OBM 75%, ACC-0c, Tail)</h3>
 <img src="assets/figures/figure_14_realworld_methods.png" alt="Figure 14 — Piecewise-spectrum methods">
-<p>Code: <a href="../workflows/figure_12_realworld_methods.py"><code>workflows/figure_12_realworld_methods.py</code></a></p>
+<p>Code: <a href="../workflows/figure_14_15_realworld_combined.py"><code>workflows/figure_14_15_realworld_combined.py</code></a></p>
 <h3>Figure 15 — MAE vs integration time on piecewise-spectrum signal</h3>
 <img src="assets/figures/figure_15_realworld_mae_vs_time.png" alt="Figure 15 — Piecewise-spectrum MAE vs time">
-<p>Code: <a href="../workflows/figure_15_realworld_mae_vs_time.py"><code>workflows/figure_15_realworld_mae_vs_time.py</code></a></p>
+<p>Code: <a href="../workflows/figure_14_15_realworld_combined.py"><code>workflows/figure_14_15_realworld_combined.py</code></a></p>
 <h2>Stationarity Detection (Mockett-Style)</h2>
-<p>To identify initial non-stationarity, we remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is hard-clipped to zero once it decays by 90% of its initial value (at \(t=1\) s).</p>
+<p>To identify initial non-stationarity, we remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is shifted so the 90% cutoff at \(t=1\) s is continuous (no step jump at cutoff).</p>
 <p>Using ACC-0c to estimate uncertainty in the mean for each trimmed signal, the curve \(s(t_{\mathrm{remove}})\) shows a minimum near the end of the transient. The minimum is used as the detected transient-removal time.</p>
 <h3>Figure 16 — Mockett-style stationarity scan with ACC-0c</h3>
 <img src="assets/figures/figure_16_stationarity_mockett.png" alt="Figure 16 — Stationarity scan">
