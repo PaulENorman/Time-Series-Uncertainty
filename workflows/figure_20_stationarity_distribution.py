@@ -72,7 +72,7 @@ def main():
     fig, axs = plt.subplots(2, 1, figsize=(9.4, 8.4), sharex=False)
     ax_top, ax_bot = axs
     bins_t = np.linspace(0.0, 2.2, 140)
-    bins_b = np.linspace(-0.06, 0.26, 150)
+    bins_b = np.linspace(-0.15, 0.45, 170)
     colors = {1.0: "tab:blue", 2.0: "tab:purple", 3.0: "tab:green"}
 
     for amp in AMP_LEVELS:
@@ -88,7 +88,8 @@ def main():
             )
             if np.isfinite(res.t_star):
                 t_star.append(float(res.t_star))
-            mean_bias.append(float(np.mean(x) - np.mean(x_base)))
+            sigma_base = max(float(np.std(x_base)), 1e-12)
+            mean_bias.append(float((np.mean(x) - np.mean(x_base)) / sigma_base))
         t_star = np.asarray(t_star, dtype=float)
         mean_bias = np.asarray(mean_bias, dtype=float)
         if t_star.size == 0:
@@ -106,7 +107,7 @@ def main():
     ax_top.legend(fontsize=9)
 
     ax_bot.axvline(0.0, color="0.35", ls="--", lw=1.2)
-    ax_bot.set_xlabel("Added bias in sample mean")
+    ax_bot.set_xlabel(r"Added bias in sample mean / $\sigma$")
     ax_bot.set_ylabel("Density")
     ax_bot.set_title("Distribution of transient-induced mean bias")
     ax_bot.grid(True, alpha=0.25)
