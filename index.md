@@ -180,7 +180,7 @@ Code: [`workflows/figure_17_18_realworld_combined.py`](../workflows/figure_17_18
 ## Stationarity Detection (Mockett-Style)
 To identify initial non-stationarity, a typical practice (like the methods evaluated in [8] and developed by Mockett et al. [2]) is to remove increasing amounts of early-time data and recompute uncertainty \(s\) each time. For this synthetic test, the baseline signal uses a piecewise spectrum (flat to 10 Hz, then \(f^{-5/3}\)), with an added exponential transient of amplitude \(2\sigma\) from \(t=0\). The transient is shifted so the 90% cutoff at \(t=1\) s is continuous (no step jump at cutoff).
 
-Using ACC-0c to estimate uncertainty in the mean for each trimmed signal, the curve \(s(t_{\mathrm{remove}})\) shows a minimum near the end of the transient. The minimum is used as the detected transient-removal time. This approach can be compared against other techniques such as the Geweke [7] z-score test or Heidelberger and Welch Cramer-von-Mises test [5], which also evaluate stationarity.
+Using ACC-0c to estimate uncertainty in the mean for each trimmed signal, the curve \(s(t_{\mathrm{remove}})\) shows a minimum near the end of the transient. Figure 20 shows how accurate the method is in predicting the stabilization time over many, such signals. Although the methods usually predict the stabilization time is earlier than it actually is, the effect on the means is relatively small.
 
 ### Figure 19 — Mockett-style stationarity scan with ACC-0c
 ![Figure 19 — Stationarity scan](assets/figures/figure_19_stationarity_mockett.png)
