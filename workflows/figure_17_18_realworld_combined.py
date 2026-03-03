@@ -221,7 +221,7 @@ def _plot_figure_14(y_mc, preds):
         ax.set_title("Piecewise-spectrum method comparison")
     ax.grid(True, which="both", alpha=0.25)
     ax.legend(fontsize=9)
-    out = FIG_DIR / "figure_14_realworld_methods.png"
+    out = FIG_DIR / "figure_17_realworld_methods.png"
     plt.tight_layout()
     plt.savefig(out, dpi=170)
     plt.close()
@@ -259,7 +259,7 @@ def _plot_figure_15(y_mc, preds):
         ax.set_title("Method error vs integration time (piecewise-spectrum signal)")
     ax.grid(True, which="both", alpha=0.25)
     ax.legend(fontsize=9)
-    out = FIG_DIR / "figure_15_realworld_mae_vs_time.png"
+    out = FIG_DIR / "figure_18_realworld_mae_vs_time.png"
     plt.tight_layout()
     plt.savefig(out, dpi=170)
     plt.close()

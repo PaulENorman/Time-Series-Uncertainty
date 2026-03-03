@@ -37,7 +37,7 @@ def main():
     ax.set_title("Tail-fit theory: bounded log-linear extrapolation")
     ax.grid(True, which="both", alpha=0.25)
     ax.legend(fontsize=9)
-    out = FIG_DIR / "figure_09_tail_theory.png"
+    out = FIG_DIR / "figure_11_tail_theory.png"
     plt.tight_layout()
     plt.savefig(out, dpi=170)
     plt.close()

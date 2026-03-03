@@ -195,7 +195,7 @@ def main():
         fig.suptitle("Real-world-style noise: B=1 then $f^{-5/3}$", y=0.995)
 
     FIG_DIR.mkdir(parents=True, exist_ok=True)
-    out = FIG_DIR / "figure_13_realworld_noise.png"
+    out = FIG_DIR / "figure_16_realworld_noise.png"
     plt.tight_layout()
     plt.savefig(out, dpi=170)
     plt.close()

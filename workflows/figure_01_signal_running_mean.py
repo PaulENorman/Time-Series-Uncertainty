@@ -34,7 +34,13 @@ def main():
     axs[0].grid(True, alpha=0.25)
 
     axs[1].plot(t, run, color="tab:red", lw=1.6, label="Forward cumulative mean")
-    axs[1].axhline(np.mean(x), color="k", ls="--", lw=1.1, label="Final mean")
+    mu_final = float(np.mean(x))
+    axs[1].axhline(mu_final, color="k", ls="--", lw=1.1, label="Final mean")
+    # Zoom around the final mean to show the uncertainty envelope clearly.
+    lo = np.percentile(run, 5.0)
+    hi = np.percentile(run, 95.0)
+    pad = 0.08 * max(hi - lo, 1e-9)
+    axs[1].set_ylim(lo - pad, hi + pad)
     axs[1].set_xlabel("Time (s)")
     axs[1].set_ylabel("Running mean")
     axs[1].set_title("Signal and running mean")

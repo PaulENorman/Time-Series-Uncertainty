@@ -60,7 +60,7 @@ def main():
     ax.set_title("MAE across BL regimes")
     ax.grid(True, which="both", alpha=0.25)
     ax.legend(fontsize=9)
-    out = FIG_DIR / "figure_12_methods_mae_vs_B.png"
+    out = FIG_DIR / "figure_15_methods_mae_vs_B.png"
     plt.tight_layout()
     plt.savefig(out, dpi=170)
     plt.close()
