@@ -192,11 +192,18 @@ Code: [`workflows/figure_20_stationarity_distribution.py`](../workflows/figure_2
 
 
 ## References
-[1] P. Bevington and K. Robinson, *Data Reduction and Error Analysis in the Physical Sciences*, McGraw-Hill, 1993.  
-[2] C. Mockett, T. Knacke, and F. Thiele, “Detection of Initial Transients and Estimation of Statistical Error in Time-Resolved Turbulent Flow Data,” 2010.  
-[3] H. Flyvbjerg and H. G. Petersen, “Error estimates on averages of correlated data,” *J. Chem. Phys.*, 1989.  
-[4] J. S. Bendat and A. G. Piersol, *Random Data: Analysis and Measurement Procedures*, Wiley, 2010.  
-[5] P. Heidelberger and P. D. Welch, “A spectral method for confidence interval generation and run length control in simulations,” 1981.  
-[6] A. D. Sokal, “Monte Carlo Methods in Statistical Mechanics: Foundations and New Algorithms,” 1996.  
-[7] J. Geweke, “Evaluating the accuracy of sampling-based approaches to calculating posterior moments,” 1991.  
+[1] P. Bevington and K. Robinson, *Data Reduction and Error Analysis in the Physical Sciences*, McGraw-Hill, 1993.
+
+[2] C. Mockett, T. Knacke, and F. Thiele, “Detection of Initial Transients and Estimation of Statistical Error in Time-Resolved Turbulent Flow Data,” 2010.
+
+[3] H. Flyvbjerg and H. G. Petersen, “Error estimates on averages of correlated data,” *J. Chem. Phys.*, 1989.
+
+[4] J. S. Bendat and A. G. Piersol, *Random Data: Analysis and Measurement Procedures*, Wiley, 2010.
+
+[5] P. Heidelberger and P. D. Welch, “A spectral method for confidence interval generation and run length control in simulations,” 1981.
+
+[6] A. D. Sokal, “Monte Carlo Methods in Statistical Mechanics: Foundations and New Algorithms,” 1996.
+
+[7] J. Geweke, “Evaluating the accuracy of sampling-based approaches to calculating posterior moments,” 1991.
+
 [8] P. Norman and K. Howard, “Evaluating Statistical Error in Unsteady Automotive Computational Fluid Dynamics Simulations,” SAE Technical Paper 2020-01-0692, 2020.
