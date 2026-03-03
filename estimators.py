@@ -4,7 +4,9 @@ bandwidth-limited (BL) curve fitting.
 """
 
 import numpy as np
+import scipy.fft as sfft
 from numpy import pi, sin, log
+from scipy.fft import next_fast_len
 from scipy.special import sici
 from scipy.optimize import curve_fit
 
@@ -188,9 +190,11 @@ def _autocov_fft(signal, unbiased=False, max_lag=50000):
     x = np.asarray(signal, dtype=float)
     n = x.size
     x = x - np.mean(x)
-    nfft = 1 << int(np.ceil(np.log2(2 * n - 1)))
-    fx = np.fft.rfft(x, n=nfft)
-    c_full = np.fft.irfft(fx * np.conj(fx), n=nfft)
+    nfft = next_fast_len(2 * n - 1)
+    fx = sfft.rfft(x, n=nfft)
+    # Real power spectrum |FFT(x)|^2 avoids complex multiply+conjugate temp.
+    pxx = fx.real * fx.real + fx.imag * fx.imag
+    c_full = sfft.irfft(pxx, n=nfft)
     c = c_full[:n]
     if unbiased:
         denom = np.arange(n, 0, -1, dtype=float)

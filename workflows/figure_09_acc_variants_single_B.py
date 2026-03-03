@@ -44,7 +44,7 @@ def main():
     ax.legend(fontsize=9)
 
     FIG_DIR.mkdir(parents=True, exist_ok=True)
-    out = FIG_DIR / "figure_08b_acc_variants_single_B.png"
+    out = FIG_DIR / "figure_09_acc_variants_single_B.png"
     plt.tight_layout()
     plt.savefig(out, dpi=170)
     plt.close()

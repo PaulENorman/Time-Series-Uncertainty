@@ -50,9 +50,12 @@ def add_exponential_transient(
 
     frac = float(np.clip(cutoff_fraction, 1e-8, 0.5))
     alpha = -np.log(frac) / max(float(cutoff_time), 1e-12)
-    transient = amp0 * np.exp(-alpha * t)
-    # Definitive cutoff at the 99% decay point (or user-specified fraction).
-    transient[transient <= frac * amp0] = 0.0
+    # Shift/subtract the cutoff fraction so the hard cutoff is continuous.
+    # This preserves the initial amplitude at t=0 and removes the step jump
+    # when forcing the tail to zero.
+    exp_term = np.exp(-alpha * t)
+    transient = amp0 * (exp_term - frac) / max(1.0 - frac, 1e-12)
+    transient = np.maximum(transient, 0.0)
     return x + transient, transient
 
 

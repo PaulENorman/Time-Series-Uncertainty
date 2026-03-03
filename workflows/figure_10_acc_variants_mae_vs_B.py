@@ -53,7 +53,7 @@ def main():
     ax.legend(fontsize=9)
 
     FIG_DIR.mkdir(parents=True, exist_ok=True)
-    out = FIG_DIR / "figure_08c_acc_variants_mae_vs_B.png"
+    out = FIG_DIR / "figure_10_acc_variants_mae_vs_B.png"
     plt.tight_layout()
     plt.savefig(out, dpi=170)
     plt.close()

@@ -113,7 +113,7 @@ def main():
     ax_bot.legend(fontsize=9)
 
     FIG_DIR.mkdir(parents=True, exist_ok=True)
-    out = FIG_DIR / "figure_17_stationarity_distribution.png"
+    out = FIG_DIR / "figure_20_stationarity_distribution.png"
     plt.tight_layout()
     plt.savefig(out, dpi=170)
     plt.close()
